@@ -4,6 +4,7 @@ Operacje
 2. Operacje crud koszyka
 3. Operacje logowania i rejestracji
 
+Podział zadań:
 1. Dodać domyślne produkty i je wyświetlić (Osoba 1)
 2. Operacje crud produktów (Osoba 1)
 3. Operacje crud koszyka (Osoba 2 - Piotrek)
