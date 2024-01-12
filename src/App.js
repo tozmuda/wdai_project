@@ -1,119 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import ProductList from './ProductList';
-import UpdateProductModal from './UpdateProductModal';
-import AddProductForm from './AddProductForm';
+// src/App.js
+import React, { useState , useEffect } from 'react';
+import { BrowserRouter as Router, Route, Navigate, Routes, useNavigate } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import Home from './Home';
 
 const App = () => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [sortOrder, setSortOrder] = useState('default');
-  const [searchInput, setSearchInput] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [users, setUsers] = useState((sessionStorage.getItem('users') === null) ? [{ username: "user", password: "admin"}] : JSON.parse(sessionStorage.getItem('users')));
+  const [token, setToken] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://dummyjson.com/products');
-        const data = await response.json();
-        const slicedProducts = data.products.slice(0, 30);
-        setProducts(slicedProducts);
-        setFilteredProducts(slicedProducts);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+    sessionStorage.setItem('users', JSON.stringify(users));
+    console.log(JSON.parse(sessionStorage.getItem('users')));
+  }, [users]);
 
-    fetchData();
-  }, []);
+  const handleLogin = (username, password) => {
+    console.log(JSON.parse(sessionStorage.getItem('users')));
+    const user = JSON.parse(sessionStorage.getItem('users')).find((user) => user.username === username && user.password === password);
 
-  const sortData = (order) => {
-    setSortOrder(order);
-    const productsCopy = [...filteredProducts];
-
-    if (order === 'asc') {
-      productsCopy.sort((a, b) => a.title.localeCompare(b.title));
-    } else if (order === 'desc') {
-      productsCopy.sort((a, b) => b.title.localeCompare(a.title));
+    if (user) {
+      sessionStorage.setItem('user', username);
+      window.location.replace("http://localhost:3000/home");
+    } else {
+      setMessage('Invalid data');
     }
-
-    setFilteredProducts(productsCopy);
   };
 
-  const searchProducts = () => {
-    const filteredProducts = products.filter((product) =>
-      product.title.toLowerCase().includes(searchInput.toLowerCase())
-    );
-
-    setFilteredProducts(filteredProducts);
+  const handleRegister = (username, password) => {
+    const user = JSON.parse(sessionStorage.getItem('users')).find((user) => user.username === username);
+    if(user){
+      setMessage('User already exists!')
+    }
+    else if(username.length < 4 || password.length < 4){
+      setMessage('Username and Password must be at least 4 letters long')
+    }
+    else{
+      const newUser = { username, password };
+      setUsers([...users, newUser]);
+      window.location.replace("http://localhost:3000/login");
+      alert('Acoount created, now log in');
+    }
   };
 
-  const updateProduct = (productId, updatedData) => {
-    const updatedProducts = products.map((product) =>
-      product.id === productId ? { ...product, ...updatedData } : product
-    );
+  const handleVisit = () => {
+    if(sessionStorage.getItem('user') === null){
+      window.location.replace('http://localhost:3000/login');
+    }
+    else if(sessionStorage.getItem('user') == ''){
+      window.location.replace('http://localhost:3000/login');
+    }
+    else{
+      setMessage("Welcome "+ sessionStorage.getItem('user'));
+    }
+  }
 
-    setProducts(updatedProducts);
-    setFilteredProducts(updatedProducts);
-  };
+  const handleLogout = () => {
+    sessionStorage.setItem('user', '');
+    window.location.replace('http://localhost:3000/login');
+  }
 
-  const deleteProduct = (productId) => {
-    
-    const updatedProducts = products.filter((product) => product.id !== productId);
-
-    setProducts(updatedProducts);
-    setFilteredProducts(updatedProducts);
-  };
-
-  const addProduct = (newProduct) => {
-    
-    const newProductId = Date.now();
-
-    const addedProduct = { id: newProductId, ...newProduct };
-
-    setProducts([...products, addedProduct]);
-    setFilteredProducts([...products, addedProduct]); 
-  };
 
   return (
-    <div>
-      <input
-        type="text"
-        id="searchBar"
-        placeholder="Search by title"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
-      <button onClick={searchProducts}>Search</button>
-      <select id="myselect" onChange={(e) => sortData(e.target.value)}>
-        <option value="default">default</option>
-        <option value="asc">ascending</option>
-        <option value="desc">descending</option>
-      </select>
-      <AddProductForm onAddProduct={addProduct} />
-      <div id="productList">
-        <table>
-          <thead>
-            <tr>
-              <th>Nazwa</th>
-              <th>Opis</th>
-              <th>Ikona</th>
-            </tr>
-          </thead>
-          <ProductList
-            products={filteredProducts}
-            onUpdateProduct={(productId, updatedData) => updateProduct(productId, updatedData)}
-            onDeleteProduct={(productId) => deleteProduct(productId)}
-          />
-        </table>
-      </div>
-      {selectedProduct && (
-        <UpdateProductModal
-          product={selectedProduct}
-          onUpdate={(productId, updatedData) => updateProduct(productId, updatedData)}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element= { <Navigate to="/login" /> } />
+        <Route path="/login" element= { <Login onLogin={handleLogin} message={message}/> } />
+        <Route path="/register" element= { <Register onRegister={handleRegister} message={message}/> } />
+        <Route path="/home" element= { <Home checkIfLoggedIn={handleVisit} onLogout={handleLogout}message={message}/> } />
+      </Routes>
+    </Router>
   );
 };
 
