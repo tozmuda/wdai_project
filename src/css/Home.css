@@ -1,0 +1,107 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fdfdfd;
+    margin: 2em auto;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#sortBar{
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: row;
+}
+
+#logout{
+    position: absolute;
+    top:50px;
+    right: 200px;
+}
+
+button {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    font-size: 16px;
+    background-color: #476f95;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #194a7a;
+}
+
+#searchBar {
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px;
+}
+
+#myselect {
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px;
+}
+
+#productList {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+tr{
+    display: flex;
+}
+
+#icon{
+    flex:1;
+    font-size: 20px;
+}
+
+#title{
+    flex: 1;
+    font-size: 20px;
+}
+
+#description{
+    flex:5;
+    font-size: 20px;
+}
+
+#action{
+    flex:1;
+    font-size: 20px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

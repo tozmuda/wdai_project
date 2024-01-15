@@ -1,0 +1,51 @@
+#shoppingCart {
+    width: 80%;
+    margin: 2em auto;
+}
+
+#shoppingCart h2 {
+    color: #333;
+}
+
+#shoppingCart ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#shoppingCart li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: relative;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+}
+
+#edit{
+    margin: 0.5em auto;
+    width: 100%;
+    padding: 10px;
+}
+
+#shoppingCart img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 8px;
+
+}
+
+#shoppingCart strong {
+    font-size: 18px;
+}
+
+#shoppingCart button {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+#shoppingCart textarea, #edit textarea{
+    max-width: 100%;
+}
